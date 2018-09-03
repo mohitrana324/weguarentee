@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "935731862690",
+    "firebase_url": "https://weguarentee.firebaseio.com",
+    "project_id": "weguarentee",
+    "storage_bucket": "weguarentee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:935731862690:android:2ab76a10d2881edd",
+        "android_client_info": {
+          "package_name": "com.weguarentee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "935731862690-fu8l38l3n5e3aneuvmmghscknn3ge8v4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG7ZsseaBANrGJ8X9rgwGAGG4lNDrY0U8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
