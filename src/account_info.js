@@ -7,7 +7,7 @@
 import React, {Component} from 'react';
 import {
   Text,Alert,
-  View,StatusBar,YellowBox,StyleSheet, ScrollView,Picker, ToastAndroid,AsyncStorage,TouchableHighlight
+  View,StatusBar,YellowBox,StyleSheet, ScrollView,Picker, ToastAndroid,AsyncStorage,TouchableHighlight,TouchableWithoutFeedback
 } from 'react-native';
 import env from './components/env';
 import { ProgressDialog } from 'react-native-simple-dialogs';
@@ -26,12 +26,12 @@ class Page1 extends Component {
     static navigationOptions = {
         title: 'Account Information',
         headerTintColor: 'white',
-        headerLeft: <TouchableHighlight onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
+        headerLeft: <TouchableWithoutFeedback onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
           color: 'white', paddingLeft: 20,
           padding: 5,
           fontFamily: 'WhitneyMedium',
           fontSize: 18
-        }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableHighlight>,
+        }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableWithoutFeedback>,
         headerStyle: {
           backgroundColor: '#51c0c3'
         }

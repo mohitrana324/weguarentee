@@ -14,7 +14,7 @@ import {
   AsyncStorage,
   TouchableOpacity,
   Alert, BackAndroid, Dimensions,
-  TouchableHighlight,
+  TouchableHighlight,TouchableWithoutFeedback,
   StatusBar,
   ScrollView,ImageBackground
 } from 'react-native';
@@ -181,7 +181,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
           var data = responseData.data.map(data => {
             var title = data.name.replace(/(<([^>]+)>)/ig, '');
             return <View style={styles.tabItem} key={data.category_id}>
-              <TouchableHighlight onPress={() => this.props.navigation.navigate('Products')} underlayColor={'#fff'}>
+              <TouchableHighlight onPress={() => this.props.navigation.navigate('SubCategory', {data:data})} key={data.category_id} underlayColor={'#fff'}>
                 <Image source={require('./images/shirt.png')} style={{ width: 30, height: 30 }} />
               </TouchableHighlight>
               <Text style={styles.tabTitle}>{title.replace('&amp;', '&')}</Text>
@@ -237,31 +237,31 @@ export default class ListViewExample extends PureComponent<{}, State> {
       backgroundColor: '#51c0c3'
     },
     statusBarStyle: 'light-content',
-    headerLeft: <TouchableHighlight onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
+    headerLeft: <TouchableWithoutFeedback onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
       color: 'white', paddingLeft: 20,
       padding: 5,
       fontFamily: 'WhitneyMedium',
       fontSize: 18
-    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableHighlight>,
+    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableWithoutFeedback>,
     headerRight: <View style={{ flex: 1, flexDirection: 'row' }}>
-      <TouchableHighlight onPress={() => navigation.navigate('Search')}>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('Search')}>
         <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
           <FontAwesome>{Icons.search}</FontAwesome>
         </Text>
-      </TouchableHighlight>
-      <TouchableHighlight onPress={() => navigation.navigate('Wishlist')}>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('Wishlist')}>
         <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
           <FontAwesome>{Icons.heart}</FontAwesome>
         </Text>
-      </TouchableHighlight>
-      <TouchableHighlight onPress={() => navigation.navigate('Cart')}>
+      </TouchableWithoutFeedback>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('Cart')}>
         <View>
           {typeof (navigation.state.params) === 'undefined' || typeof (navigation.state.params.cartCount) === 'undefined' ? <Text style={{ position: 'absolute' }}></Text> : navigation.state.params.cartCount}
           <Text style={{ color: 'white', paddingLeft: 20, padding: 5, paddingRight: 20, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
             <FontAwesome>{Icons.shoppingBag}</FontAwesome>
           </Text>
         </View>
-      </TouchableHighlight>
+      </TouchableWithoutFeedback>
       {/* <TouchableHighlight>
                   <View>1</View>
                   
@@ -275,6 +275,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
   };
 
   addCart(product) {
+    this.setState({progressVisible:true});
     AsyncStorage.getItem('token').then((token) => {
       fetch(env.BASE_URL + "rest/cart/cart", {
         method: 'POST',
@@ -289,6 +290,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
           console.log(responseData);
           if (responseData.success == 1) {
             this.cartCounter();
+            this.setState({progressVisible:false});
             // this.props.navigation.setParams({ cartCount: <Text style={styles.badge}>{responseData.data.total_product_count}</Text> });
             ToastAndroid.show('Item added successfully', ToastAndroid.SHORT);
           }
@@ -297,6 +299,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
   }
 
   addWishlist(product_id) {
+    this.setState({progressVisible:true});
     AsyncStorage.getItem('token').then((token) => {
       fetch(env.BASE_URL + "rest/wishlist/wishlist&id=" + product_id, {
         method: 'POST',
@@ -309,9 +312,11 @@ export default class ListViewExample extends PureComponent<{}, State> {
         .then((responseData) => {
           console.log(responseData);
           if (responseData.success == 1) {
+            this.setState({progressVisible:false});
             ToastAndroid.show('Item added successfully in wishlist', ToastAndroid.SHORT);
           } else
             if (responseData.error[0] == 'You must login or create an account to save item to your wish list') {
+              this.setState({progressVisible:false});
               Alert.alert(
                 'Login',
                 'You must login or create account to save item to your wish list',
@@ -321,6 +326,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
                 ],
                 { cancelable: false }
               )
+              
             }
 
         })
@@ -329,32 +335,35 @@ export default class ListViewExample extends PureComponent<{}, State> {
 
   getTestimonial(){
     return(
-    // <Image source={require('./images/testimonial.jpg')} style={{width: '100%', height: '250',position:'relative'}}>
-          <Swiper style={styles.wrapper} height={250} autoplayTimeout={25} loop={true} autoplay={true}	 >
+        <View style={{padding:20}}>
+          <Image source={require('./images/testimonial.jpg')} style={styles.imgBackground}/>
+          <Swiper style={styles.wrapper} height={210} autoplayTimeout={25} loop={true} autoplay={true}	 >
             <View style={styles.slide1}>
               <Text style={styles.text}>Dr. Patkar's Apple Cider Vinegar is a magic portion in a bottle. After years my Mother-in-law is able to walk upright and play with her grandchildren. So i am thankful to Weguarantee to introduce me to it!</Text>
-              <Text style={styles.nameText}>Jyoti Kumari - (Professional Trained Chef)</Text>
+              <Text style={styles.nameText}> Jyoti Kumari - (Professional Trained Chef)</Text>
             </View>
             <View style={styles.slide1}>
               <Text style={styles.text}>I am a 70 year old woman suffering from severe joint pain because of excessive weight. Thanks to Organic India Tulsi Green Tea, i was able to reduce a lot of weight therefore my general quality of life is improved. With Weguarantee's online organic store speedy and dependable service i know i will never be let down.</Text>
-              <Text style={styles.nameText}>Savitri Singh</Text>
+              <Text style={styles.nameText}> Savitri Singh</Text>
             </View>
             <View style={styles.slide1}>
               <Text style={styles.text}>Weguarantee's service needs due appreciation. I got my parcel well packed and right on time. Plus the people who took my order were friendly and efficient. Now I know where to get my specialized grocery from. Thanks Weguarantee.</Text>
-              <Text style={styles.nameText}>Dr. Tara Mahadevan - (Health & Nutrition Specialist)</Text>
+              <Text style={styles.nameText}> Dr. Tara Mahadevan - (Health & Nutrition Specialist)</Text>
             </View>
           </Swiper>
-          //  </Image>
+        </View>
     );
   }
 
   bottomSlider(){
     return(
-      <Swiper style={[styles.wrapper,{padding:20}]} height={150} autoplayTimeout={25} loop={true} autoplay={true}	 >
-        <Image source={require('./images/freeshiping.png')} style={{width:'100%', height:100}} />
-        <Image source={require('./images/customerservice.png')} style={{width:'100%', height:100}} />
-        <Image source={require('./images/nocharge.png')} style={{width:'100%', height:100}} />
-      </Swiper>
+      <View style={{padding:10,backgroundColor:'#fff'}}>
+        <Swiper style={styles.wrapper} showsPagination={false} height={100} autoplayTimeout={15} loop={true} autoplay={true}	 >
+          <Image source={require('./images/freeshiping.png')} style={{width:'100%', height:90,alignSelf:'center',justifyContent:'center'}} />
+          <Image source={require('./images/customerservice.png')} style={{width:'80%', height:80,alignSelf:'center',justifyContent:'center'}} />
+          <Image source={require('./images/nocharge.png')} style={{width:'100%', height:90}} />
+        </Swiper>
+      </View>
     );
   }
 
@@ -369,10 +378,10 @@ export default class ListViewExample extends PureComponent<{}, State> {
             barStyle="light-content"
           />
           {/* <TouchableHighlight onPress={()=>this.openDrawer()}><Text>Open</Text></TouchableHighlight> */}
-          {/* <ProgressDialog
+          <ProgressDialog
             visible={this.state.progressVisible}
             message="Please, wait..."
-          /> */}
+          />
 
           {this.state.slideShow}
           
@@ -530,23 +539,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  wrapper: {
-    padding:10,
-    
+  wrapper: {    
   },
   slide1: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
+    backgroundColor: 'transparent'
     
   },
   text: {
     color: '#fff',
     fontSize: 16,
-  },nameText: {
+    textAlign:'justify'
+  },
+  nameText: {
     color: '#fff',
-    fontSize: 18,
-    fontWeight:'bold'
-  }
+    fontSize: 16,
+    fontWeight:'bold',
+    textAlign:'center'
+  },
+  imgBackground: {
+    width,
+    height:250,
+    backgroundColor: 'transparent',
+    position: 'absolute'
+  },
 });

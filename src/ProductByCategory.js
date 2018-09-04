@@ -63,6 +63,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
         // cart counter get end
     }
     addCart(product) {
+        this.setState({progressVisible:true});
         AsyncStorage.getItem('token').then((token) => {
             fetch(env.BASE_URL + "rest/cart/cart", {
                 method: 'POST',
@@ -77,6 +78,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
                     console.log(responseData);
                     if (responseData.success == 1) {
                         this.cartCounter();
+                        this.setState({progressVisible:false});
                         // this.props.navigation.setParams({ cartCount: <Text style={styles.badge}>{responseData.data.total_product_count}</Text> });
                         ToastAndroid.show('Item added successfully', ToastAndroid.SHORT);
                     }
@@ -193,6 +195,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
     }
 
     addWishlist(product_id) {
+        this.setState({progressVisible:true});
         AsyncStorage.getItem('token').then((token) => {
             fetch(env.BASE_URL + "rest/wishlist/wishlist&id=" + product_id, {
                 method: 'POST',
@@ -205,9 +208,11 @@ export default class ListViewExample extends PureComponent<{}, State> {
                 .then((responseData) => {
                     console.log(responseData);
                     if (responseData.success == 1) {
+                        this.setState({progressVisible:false});
                         ToastAndroid.show('Item added successfully in wishlist', ToastAndroid.SHORT);
                     } else
                         if (responseData.error[0] == 'You must login or create an account to save item to your wish list') {
+                            this.setState({progressVisible:false});
                             Alert.alert(
                                 'Login',
                                 'You must login or create account to save item to your wish list',
