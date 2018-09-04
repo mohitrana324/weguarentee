@@ -16,7 +16,7 @@ import {
   Alert, BackAndroid, Dimensions,
   TouchableHighlight,
   StatusBar,
-  ScrollView
+  ScrollView,ImageBackground
 } from 'react-native';
 var { height, width } = Dimensions.get('window');
 var SplashScreen = require('@remobile/react-native-splashscreen');
@@ -27,6 +27,7 @@ import { ListItem, Header, SearchBar } from 'react-native-elements';
 import env from './components/env';
 import Tabs from './homeTabs';
 import { ProgressDialog } from 'react-native-simple-dialogs';
+import Swiper from 'react-native-swiper';
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 export default class ListViewExample extends PureComponent<{}, State> {
@@ -326,6 +327,37 @@ export default class ListViewExample extends PureComponent<{}, State> {
     })
   }
 
+  getTestimonial(){
+    return(
+    // <Image source={require('./images/testimonial.jpg')} style={{width: '100%', height: '250',position:'relative'}}>
+          <Swiper style={styles.wrapper} height={250} autoplayTimeout={25} loop={true} autoplay={true}	 >
+            <View style={styles.slide1}>
+              <Text style={styles.text}>Dr. Patkar's Apple Cider Vinegar is a magic portion in a bottle. After years my Mother-in-law is able to walk upright and play with her grandchildren. So i am thankful to Weguarantee to introduce me to it!</Text>
+              <Text style={styles.nameText}>Jyoti Kumari - (Professional Trained Chef)</Text>
+            </View>
+            <View style={styles.slide1}>
+              <Text style={styles.text}>I am a 70 year old woman suffering from severe joint pain because of excessive weight. Thanks to Organic India Tulsi Green Tea, i was able to reduce a lot of weight therefore my general quality of life is improved. With Weguarantee's online organic store speedy and dependable service i know i will never be let down.</Text>
+              <Text style={styles.nameText}>Savitri Singh</Text>
+            </View>
+            <View style={styles.slide1}>
+              <Text style={styles.text}>Weguarantee's service needs due appreciation. I got my parcel well packed and right on time. Plus the people who took my order were friendly and efficient. Now I know where to get my specialized grocery from. Thanks Weguarantee.</Text>
+              <Text style={styles.nameText}>Dr. Tara Mahadevan - (Health & Nutrition Specialist)</Text>
+            </View>
+          </Swiper>
+          //  </Image>
+    );
+  }
+
+  bottomSlider(){
+    return(
+      <Swiper style={[styles.wrapper,{padding:20}]} height={150} autoplayTimeout={25} loop={true} autoplay={true}	 >
+        <Image source={require('./images/freeshiping.png')} style={{width:'100%', height:100}} />
+        <Image source={require('./images/customerservice.png')} style={{width:'100%', height:100}} />
+        <Image source={require('./images/nocharge.png')} style={{width:'100%', height:100}} />
+      </Swiper>
+    );
+  }
+
   render() {
     const { navigate } = this.props.navigation;
 
@@ -337,12 +369,13 @@ export default class ListViewExample extends PureComponent<{}, State> {
             barStyle="light-content"
           />
           {/* <TouchableHighlight onPress={()=>this.openDrawer()}><Text>Open</Text></TouchableHighlight> */}
-          <ProgressDialog
+          {/* <ProgressDialog
             visible={this.state.progressVisible}
             message="Please, wait..."
-          />
+          /> */}
 
           {this.state.slideShow}
+          
           <View style={styles.tabIcon}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
               {this.state.category}
@@ -382,7 +415,10 @@ export default class ListViewExample extends PureComponent<{}, State> {
                 <Image source={require('./images/cat4.png')} style={{width:width/2, height:width/2}} />
               </ScrollView>
             </View>
+            
           </View>
+          {this.getTestimonial()}
+          {this.bottomSlider()}
         </View>
       </ScrollView>
     );
@@ -494,5 +530,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
+  wrapper: {
+    padding:10,
+    
+  },
+  slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#92BBD9',
+    
+  },
+  text: {
+    color: '#fff',
+    fontSize: 16,
+  },nameText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight:'bold'
+  }
 });
