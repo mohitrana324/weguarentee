@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import {
     Text, Dimensions,
-    View, StatusBar, StyleSheet,Alert, TextInput, ScrollView, WebView, TouchableHighlight, Image,
+    View, StatusBar, StyleSheet,Alert, TextInput, ScrollView, WebView, TouchableHighlight, Image,TouchableWithoutFeedback,
     AsyncStorage, ToastAndroid
 } from 'react-native';
 var { height, width } = Dimensions.get('window');
@@ -26,7 +26,8 @@ class Page1 extends Component {
             position: 1,
             height: 250,
             dialogVisible: false,
-            progressVisible: false
+            progressVisible: false,
+            related:''
         };
     }
     componentDidMount() {
@@ -45,6 +46,7 @@ class Page1 extends Component {
                 }
             }).then((response) => response.json())
                 .then((responseData) => {
+                    console.log('product details',responseData)
                     this.setState({ progressVisible: false });
 
                     if (responseData.data.special_formated != 0) {
@@ -132,6 +134,7 @@ class Page1 extends Component {
                         </View>;
                     })
                     this.setState({ related: data });
+                    console.log('final related product',this.state.related);
                 })
         })
     }
@@ -157,7 +160,41 @@ class Page1 extends Component {
         })
         // cart counter get end
     }
+    addWishlist(product_id){
+        this.setState({progressVisible:true});
+        AsyncStorage.getItem('token').then((token) => {
+          fetch(env.BASE_URL + "rest/wishlist/wishlist&id="+product_id, {
+            method: 'POST',
+            headers: {
+              Authorization: 'Bearer ' + JSON.parse(token).access_token,
+              Accept  : 'application/json',
+                  'Content-Type' : 'application/json'
+            }
+          }).then((response) => response.json())
+            .then((responseData) => {
+              console.log(responseData);
+              if(responseData.success == 1)
+              {this.setState({progressVisible:false});
+                ToastAndroid.show('Item added successfully in wishlist', ToastAndroid.SHORT);
+              }else
+              if(responseData.error[0] == 'You must login or create an account to save item to your wish list'){
+                this.setState({progressVisible:false});
+                Alert.alert(
+                  'Login',
+                  'You must login or create account to save item to your wish list',
+                  [
+                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    {text: 'Login', onPress: () => this.props.navigation.navigate('ScreenFour')},
+                  ],
+                  { cancelable: false }
+                )
+              }
+    
+            })
+          })
+      }
     addCart(product) {
+        this.setState({progressVisible:true});
         AsyncStorage.getItem('token').then((token) => {
             fetch(env.BASE_URL + "rest/cart/cart", {
                 method: 'POST',
@@ -171,6 +208,7 @@ class Page1 extends Component {
                 .then((responseData) => {
                     console.log(responseData);
                     if (responseData.success == 1) {
+                        this.setState({progressVisible:false});
                         this.cartCounter();
                         // this.props.navigation.setParams({ cartCount: <Text style={styles.badge}>{responseData.data.total_product_count}</Text> });
                         ToastAndroid.show('Item added successfully', ToastAndroid.SHORT);
@@ -184,36 +222,36 @@ class Page1 extends Component {
         headerStyle: {
             backgroundColor: '#51c0c3'
         },
-        headerLeft: <TouchableHighlight onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
+        headerLeft: <TouchableWithoutFeedback onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
             color: 'white', paddingLeft: 20,
             padding: 5,
             fontFamily: 'WhitneyMedium',
             fontSize: 18
-        }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableHighlight>,
+        }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableWithoutFeedback>,
         statusBarStyle: 'light-content',
         //   headerLeft: <TouchableHighlight onPress={() => navigation.navigate("DrawerOpen")}><Text style={{color:'white',paddingLeft:20,
         //   padding:5,
         //   fontFamily:'WhitneyMedium',
         //   fontSize:18}}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableHighlight>,
         headerRight: <View style={{ flex: 1, flexDirection: 'row' }}>
-            <TouchableHighlight onPress={() => navigation.navigate('Search')}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('Search')}>
                 <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
                     <FontAwesome>{Icons.search}</FontAwesome>
                 </Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => navigation.navigate('Wishlist')}>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('Wishlist')}>
                 <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
                     <FontAwesome>{Icons.heart}</FontAwesome>
                 </Text>
-            </TouchableHighlight>
-            <TouchableHighlight onPress={() => navigation.navigate('Cart')}>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('Cart')}>
                 <View>
                     {typeof (navigation.state.params) === 'undefined' || typeof (navigation.state.params.cartCount) === 'undefined' ? <Text style={{ position: 'absolute' }}></Text> : navigation.state.params.cartCount}
                     <Text style={{ color: 'white', paddingLeft: 20, padding: 5, paddingRight: 20, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
                         <FontAwesome>{Icons.shoppingBag}</FontAwesome>
                     </Text>
                 </View>
-            </TouchableHighlight>
+            </TouchableWithoutFeedback>
             {/* <TouchableHighlight>
                         <View>1</View>
                         
@@ -286,12 +324,12 @@ class Page1 extends Component {
                             />
                         </View>
                     </View> */}
-                    <View>
+                    {this.state.related.length>0 ? <View>
                         <Text style={{ fontFamily: 'cursive', padding: 10, fontSize: 24, textAlign: 'left', fontWeight: 'bold' }}>Releated Products</Text>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {this.state.related}
                         </ScrollView>
-                    </View>
+                    </View>:<View/>}
                 </ScrollView>
                 <View style={{ width: '100%', height: 50, left: 0, right: 0, padding: 0, paddingTop: 3, position: 'absolute', bottom: 0 }}><Button onPress={() => this.addCart(params.id)} title='Add to Cart' buttonStyle={{ backgroundColor: '#51c0c3', justifyContent: 'center', width: '100%', alignItems: 'center' }} /></View>
             </View>

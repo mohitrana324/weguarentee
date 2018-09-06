@@ -39,9 +39,9 @@ export default class ListViewExample extends PureComponent<{}, State> {
     this.setState({search:value});
   }
   _handlePress(value)
-  {
+  {this.setState({progressVisible:true});
     console.log(value);
-    this.setState({loading:true});
+    //this.setState({loading:true});
     AsyncStorage.getItem('token').then((token) => {
         fetch(env.BASE_URL+ "feed/rest_api/products&search="+value.search, {
           method:'get',
@@ -72,7 +72,17 @@ export default class ListViewExample extends PureComponent<{}, State> {
                     </View>
                 </View>;
             })
-            this.setState({ products: data });
+            if(data.length>0){
+              this.setState({ products: data,progressVisible:false });
+            }else{
+              this.setState({progressVisible:false,
+                products: <View style={[styles.cartEmpty,{justifyContent:'center',alignItems:'center',flex:1,height,width}]}>
+                  <FontAwesome style={{ fontSize: 100, color: '#ccc' }}>{Icons.search}</FontAwesome>
+                  <Text>No Search Item Found</Text>
+                </View>
+              });
+            }
+            
         }
         })
     });
@@ -171,8 +181,8 @@ export default class ListViewExample extends PureComponent<{}, State> {
         <SearchBar
           lightTheme
           placeholder='Type Here...'
-          showLoadingIcon={this.state.loading}
-          lightTheme
+         // showLoadingIcon={this.state.loading}
+          //value={this.state.search}
           returnKeyType="search"
           platform="android"
           onSubmitEditing={() => this._handlePress(this.state.search)}
