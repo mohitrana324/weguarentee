@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text, ScrollView,ToastAndroid,
-  View, StatusBar, StyleSheet, AsyncStorage, TouchableHighlight,TouchableWithoutFeedback
+  View, StatusBar, StyleSheet, AsyncStorage, TouchableHighlight,TouchableOpacity
 } from 'react-native';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { CheckBox } from 'react-native-elements';
@@ -22,7 +22,7 @@ class Page3 extends Component {
     headerStyle: {
       backgroundColor: '#51c0c3'
     },
-    headerRight:<TouchableWithoutFeedback onPress={()=>navigation.navigate('Payment')}><Text style={{color:'white', fontSize:18, padding:10}}><FontAwesome>{Icons.check}</FontAwesome></Text></TouchableWithoutFeedback>
+    headerRight:<TouchableOpacity onPress={()=>navigation.navigate('Payment')}><Text style={{color:'white', fontSize:18, padding:10}}><FontAwesome>{Icons.check}</FontAwesome></Text></TouchableOpacity>
   })
   
   getAddress() {

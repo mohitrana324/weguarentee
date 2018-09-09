@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import {
     Text, Dimensions,
-    View, StatusBar, StyleSheet,Alert, TextInput, ScrollView, WebView, TouchableHighlight, Image,TouchableWithoutFeedback,
+    View, StatusBar, StyleSheet,Alert, TextInput, ScrollView, WebView, TouchableHighlight, Image,TouchableOpacity,
     AsyncStorage, ToastAndroid
 } from 'react-native';
 var { height, width } = Dimensions.get('window');
@@ -19,6 +19,9 @@ import ImageSlider from 'react-native-image-slider';
 import HTMLView from 'react-native-htmlview';
 import { ProgressDialog, Dialog } from 'react-native-simple-dialogs';
 import { ListItem, Rating, SearchBar, Header, CheckBox, Button, FormLabel, FormInput, FormValidationMessage, Divider } from 'react-native-elements';
+import StarRating from 'react-native-star-rating';
+
+
 class Page1 extends Component {
     constructor(props) {
         super(props);
@@ -27,7 +30,10 @@ class Page1 extends Component {
             height: 250,
             dialogVisible: false,
             progressVisible: false,
-            related:''
+            related:'',
+            reviewCount:0,
+            reviewList:[],
+            rating:0
         };
     }
     componentDidMount() {
@@ -68,7 +74,7 @@ class Page1 extends Component {
                     }, (errorMsg) => {
                     });
 
-                    this.setState({
+                    this.setState({reviewCount:responseData.data.reviews.review_total,
                         products: <View><ImageSlider images={image}
                             autoPlayWithInterval={3000}
                             style={{ height:width}}
@@ -79,14 +85,17 @@ class Page1 extends Component {
                                 <View style={styles.contentTop}>
                                     <Text style={styles.heading}>{responseData.data.name}</Text>
                                     {price}
-                                    <Text style={styles.review}>
-                                        <FontAwesome style={{ paddingLeft: 10 }}>{Icons.starO}</FontAwesome>
-                                        <FontAwesome style={{ paddingLeft: 10 }}>{Icons.starO}</FontAwesome>
-                                        <FontAwesome style={{ paddingLeft: 10 }}>{Icons.starO}</FontAwesome>
-                                        <FontAwesome style={{ paddingLeft: 10 }}>{Icons.starO}</FontAwesome>
-                                        <FontAwesome style={{ paddingLeft: 10 }}>{Icons.starO}</FontAwesome>
-                                        {responseData.data.rating} review / {responseData.data.reviews.review_total} write a review
-                            </Text>
+                                    <View style={{flexDirection:'row',marginLeft:10}}>
+                                        <StarRating
+                                            disabled={true}
+                                            maxStars={5}
+                                            rating={responseData.data.rating}
+                                            selectedStar={(rating) => alert(rating)}
+                                            starSize={18}
+                                            starStyle={{color:'#51c0c3'}}
+                                        />                              
+                                        <Text style={{marginLeft:5}}>{ responseData.data.rating}/5 Rating</Text>
+                                    </View>
                                     <Text style={{ paddingLeft: 10, paddingTop: 10 }}>Brands : {responseData.data.manufacturer}</Text>
                                     <Text style={{ paddingLeft: 10 }}>Product Code: {responseData.data.model}</Text>
                                     <Text style={{ paddingLeft: 10 }}>Availability: {responseData.data.stock_status}</Text>
@@ -96,8 +105,36 @@ class Page1 extends Component {
                                     value={responseData.data.description}
                                     style={{ padding: 10, margin: 0 }}
                                 />
-                            </View></View>
+                                
+                            </View></View> 
                     });
+                    var reviewLiatData= responseData.data.reviews.reviews.map((data)=>{
+                            return(
+                                <View style={{width:'100%',padding:10,backgroundColor:'#fff',marginBottom:3}} key={data.date_added}>
+                                    <View style={{flexDirection:'row'}}>
+                                        <View style={{flex:2,flexDirection:'row',marginBottom:5}}>
+                                            <Image source={require('./images/people.png')} style={{height:25,width:25,marginRight:10}}/>
+                                            <Text style={{fontSize:16,fontWeight:'bold'}}>{data.author}</Text>
+                                        </View>                                        
+                                        <Text style={{flex:1}}>{data.date_added}</Text>
+                                    </View>
+                                    <View style={{flexDirection:'row'}}>
+                                        <StarRating
+                                            disabled={true}
+                                            maxStars={5}
+                                            rating={data.rating}
+                                            selectedStar={(rating) => alert(rating)}
+                                            starSize={18}
+                                            starStyle={{color:'#51c0c3'}}
+                                        />                              
+                                        <Text style={{marginLeft:5}}>{ data.rating}/5 Rating</Text>
+                                    </View>
+                                    
+                                    <Text style={{marginTop:10,marginLeft:5}}>{data.text}</Text>                                    
+                                </View>
+                            );
+                    })
+                    this.setState({reviewList:reviewLiatData})
                 })
         })
     }
@@ -222,36 +259,36 @@ class Page1 extends Component {
         headerStyle: {
             backgroundColor: '#51c0c3'
         },
-        headerLeft: <TouchableWithoutFeedback onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
+        headerLeft: <TouchableOpacity onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
             color: 'white', paddingLeft: 20,
             padding: 5,
             fontFamily: 'WhitneyMedium',
             fontSize: 18
-        }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableWithoutFeedback>,
+        }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableOpacity>,
         statusBarStyle: 'light-content',
         //   headerLeft: <TouchableHighlight onPress={() => navigation.navigate("DrawerOpen")}><Text style={{color:'white',paddingLeft:20,
         //   padding:5,
         //   fontFamily:'WhitneyMedium',
         //   fontSize:18}}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableHighlight>,
         headerRight: <View style={{ flex: 1, flexDirection: 'row' }}>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('Search')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Search')}>
                 <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
                     <FontAwesome>{Icons.search}</FontAwesome>
                 </Text>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('Wishlist')}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Wishlist')}>
                 <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
                     <FontAwesome>{Icons.heart}</FontAwesome>
                 </Text>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('Cart')}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
                 <View>
                     {typeof (navigation.state.params) === 'undefined' || typeof (navigation.state.params.cartCount) === 'undefined' ? <Text style={{ position: 'absolute' }}></Text> : navigation.state.params.cartCount}
                     <Text style={{ color: 'white', paddingLeft: 20, padding: 5, paddingRight: 20, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
                         <FontAwesome>{Icons.shoppingBag}</FontAwesome>
                     </Text>
                 </View>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
             {/* <TouchableHighlight>
                         <View>1</View>
                         
@@ -276,60 +313,66 @@ class Page1 extends Component {
                     visible={this.state.progressVisible}
                     message="Please, wait..."
                 />
-                <Dialog
-                    visible={this.state.dialogVisible}
-                    title="Review"
-                    onTouchOutside={() => this.setState({ dialogVisible: false })} >
-                    <View>
-                        <View>
-                            <Text>Name</Text>
-                            <TextInput
-                                style={{ height: 40, borderColor: '#ccc', borderWidth: 1 }}
-                                placeholder="Enter your name"
-                                onChangeText={(name) => this.setState({ name })}
-                                underlineColorAndroid="white"
-                                value={this.state.name}
-                            />
-                        </View>
-                        <View>
-                            <Text>Review</Text>
-                            <TextInput
-                                style={{ height: 100, borderColor: '#ccc', borderWidth: 1 }}
-                                placeholder="Write review.."
-                                multiline={true}
-                                editable={true}
-                                onChangeText={(text) => this.setState({ text })}
-                                underlineColorAndroid="white"
-                                value={this.state.text}
-                            />
-                        </View>
-                        <View style={[styles.row, { justifyContent: 'flex-end' }]}>
-                            <TouchableHighlight onPress={() => this.setState({ dialogVisible: false })} style={{ padding: 10 }}><Text style={{ textAlign: 'center' }}>CANCEL</Text></TouchableHighlight>
-                            <TouchableHighlight onPress={() => this.reviewSubmit()} style={{ padding: 10 }}><Text style={{ textAlign: 'center', color: '#3c8dbc' }}>SUBMIT</Text></TouchableHighlight>
-                        </View>
-                    </View>
-                </Dialog>
                 <ScrollView>
                     {this.state.products}
-                    {/* <View style={{ width: '100%' }}>
-                        <Text style={{ fontFamily: 'cursive', padding: 10, fontSize: 24, textAlign: 'left', fontWeight: 'bold' }}>Review</Text>
-                        <View style={{ backgroundColor: 'white', alignItems: 'center' }}>
-                            <Rating
-                                showRating
-                                startingValue={5}
-                                ratingCount={5}
-                                ratingColor="#51c0c3"
-                                onFinishRating={this.ratingCompleted}
-                                style={{ paddingVertical: 10 }}
-                            />
-                        </View>
-                    </View> */}
+                    
                     {this.state.related.length>0 ? <View>
                         <Text style={{ fontFamily: 'cursive', padding: 10, fontSize: 24, textAlign: 'left', fontWeight: 'bold' }}>Releated Products</Text>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             {this.state.related}
                         </ScrollView>
                     </View>:<View/>}
+                    <Text style={{ fontFamily: 'cursive', padding: 10, fontSize: 24, textAlign: 'left', fontWeight: 'bold' }}>Product's Reviews</Text>
+                    {this.state.reviewList}
+                    <View style={{backgroundColor:'#fff',padding:10}}>
+                        {this.state.reviewCount<=0?<Text style={{fontSize: 16,paddingBottom:10,paddingTop:10 }}>There are no reviews for this product.</Text>
+                        :<Text/>}
+                        <Text style={{fontSize: 20, textAlign: 'left', fontWeight: 'bold' }}>Write a review</Text>
+                        <View>
+                            <View>
+                                <Text style={{fontWeight:'500',marginBottom:4}}>Name</Text>
+                                <TextInput
+                                    style={{ height: 40, borderColor: '#ccc', borderWidth: 1,borderRadius:5 }}
+                                    placeholder="Enter your name"
+                                    onChangeText={(name) => this.setState({ name })}
+                                    underlineColorAndroid="white"
+                                    value={this.state.name}
+                                />
+                            </View>
+                            <View>
+                                <Text style={{fontWeight:'500',marginBottom:4,marginTop:5}}>Review</Text>
+                                <TextInput
+                                    style={{ height: 100, borderColor: '#ccc', borderWidth: 1,borderRadius:5 }}
+                                    placeholder="Write review.."
+                                    multiline={true}
+                                    editable={true}
+                                    onChangeText={(text) => this.setState({ text })}
+                                    underlineColorAndroid="white"
+                                    value={this.state.text}
+                                />                                
+                            </View>
+                            <View style={{marginTop:10,marginBottom:10,flexDirection:'row'}}>
+                                <Text style={{fontWeight:'500',marginBottom:4}}>Select Rating - </Text>
+                                <StarRating
+                                    disabled={false}
+                                    maxStars={5}
+                                    rating={this.state.rating}
+                                    selectedStar={(rating) => this.setState({rating:rating})}
+                                    starSize={20}
+                                    starStyle={{color:'#51c0c3'}}
+                                />
+                            </View>
+                            {/* <View style={[styles.row, { justifyContent: 'flex-end' }]}> */}
+                                {/* <TouchableOpacity onPress={() => this.setState({ dialogVisible: false })} style={{ padding: 10 }}>
+                                    <Text style={{ textAlign: 'center' }}>CANCEL</Text>
+                                </TouchableOpacity> */}
+                                {/* <TouchableOpacity onPress={() => this.reviewSubmit()} style={{ padding: 10 }}>
+                                    <Text style={{ textAlign: 'center', color: '#3c8dbc' }}>SUBMIT</Text>
+                                </TouchableOpacity> */}
+                                <Button onPress={() => this.reviewSubmit()} title='Submit Review' buttonStyle={{ backgroundColor: '#51c0c3', justifyContent: 'center', width: '100%', alignItems: 'center' }} />
+                            {/* </View> */}
+                        </View>
+                    </View>
                 </ScrollView>
                 <View style={{ width: '100%', height: 50, left: 0, right: 0, padding: 0, paddingTop: 3, position: 'absolute', bottom: 0 }}><Button onPress={() => this.addCart(params.id)} title='Add to Cart' buttonStyle={{ backgroundColor: '#51c0c3', justifyContent: 'center', width: '100%', alignItems: 'center' }} /></View>
             </View>
@@ -337,7 +380,7 @@ class Page1 extends Component {
     }
     reviewSubmit() {
         console.log(this.state);
-        if (this.state.text && this.state.name) {
+        if (this.state.text && this.state.name && this.state.rating>0) {
             this.setState({ progressVisible: true });
             this.setState({ agree: 1 });
             const {params} = this.props.navigation.state;

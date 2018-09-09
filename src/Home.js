@@ -14,7 +14,7 @@ import {
   AsyncStorage,
   TouchableOpacity,
   Alert, BackAndroid, Dimensions,
-  TouchableHighlight,TouchableWithoutFeedback,
+  TouchableHighlight,
   StatusBar,
   ScrollView,ImageBackground
 } from 'react-native';
@@ -237,31 +237,31 @@ export default class ListViewExample extends PureComponent<{}, State> {
       backgroundColor: '#51c0c3'
     },
     statusBarStyle: 'light-content',
-    headerLeft: <TouchableWithoutFeedback onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
+    headerLeft: <TouchableOpacity onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
       color: 'white', paddingLeft: 20,
       padding: 5,
       fontFamily: 'WhitneyMedium',
       fontSize: 18
-    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableWithoutFeedback>,
+    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableOpacity>,
     headerRight: <View style={{ flex: 1, flexDirection: 'row' }}>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('Search')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Search')}>
         <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
           <FontAwesome>{Icons.search}</FontAwesome>
         </Text>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('Wishlist')}>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Wishlist')}>
         <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
           <FontAwesome>{Icons.heart}</FontAwesome>
         </Text>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('Cart')}>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
         <View>
           {typeof (navigation.state.params) === 'undefined' || typeof (navigation.state.params.cartCount) === 'undefined' ? <Text style={{ position: 'absolute' }}></Text> : navigation.state.params.cartCount}
           <Text style={{ color: 'white', paddingLeft: 20, padding: 5, paddingRight: 20, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
             <FontAwesome>{Icons.shoppingBag}</FontAwesome>
           </Text>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
       {/* <TouchableHighlight>
                   <View>1</View>
                   
@@ -358,7 +358,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
   bottomSlider(){
     return(
       <View style={{padding:10,backgroundColor:'#fff'}}>
-        <Swiper style={styles.wrapper} showsPagination={false} height={100} autoplayTimeout={15} loop={true} autoplay={true}	 >
+        <Swiper style={styles.wrapper} showsPagination={false} height={100} autoplayTimeout={15} loop={true} autoplay={true} >
           <Image source={require('./images/freeshiping.png')} style={{width:'100%', height:90,alignSelf:'center',justifyContent:'center'}} />
           <Image source={require('./images/customerservice.png')} style={{width:'80%', height:80,alignSelf:'center',justifyContent:'center'}} />
           <Image source={require('./images/nocharge.png')} style={{width:'100%', height:90}} />

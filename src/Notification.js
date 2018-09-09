@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
-import { ListView, View,Dimensions, Text, StyleSheet, Image,TouchableWithoutFeedback, ToastAndroid, AsyncStorage, TouchableHighlight, StatusBar, ScrollView } from 'react-native';
+import { ListView, View,Dimensions, Text, StyleSheet, Image,TouchableOpacity, ToastAndroid, AsyncStorage, TouchableHighlight, StatusBar, ScrollView } from 'react-native';
 
 var SplashScreen = require('@remobile/react-native-splashscreen');
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,29 +22,29 @@ export default class ListViewExample extends PureComponent<{}, State> {
     headerStyle: {
       backgroundColor: '#51c0c3'
     },
-    headerLeft: <TouchableWithoutFeedback onPress={() => navigation.navigate("DrawerOpen")}><Text style={{
+    headerLeft: <TouchableOpacity onPress={() => navigation.navigate("DrawerOpen")}><Text style={{
       color: 'white', paddingLeft: 20,
       padding: 5, fontSize: 18
-    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableWithoutFeedback>,
+    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableOpacity>,
     headerRight: <View style={{ flex: 1, flexDirection: 'row' }}>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('Search')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Search')}>
         <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
           <FontAwesome>{Icons.search}</FontAwesome>
         </Text>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback>
+      </TouchableOpacity>
+      <TouchableOpacity>
         <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
           <FontAwesome>{Icons.heart}</FontAwesome>
         </Text>
-      </TouchableWithoutFeedback>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('Cart')}>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
         <View>
           <Text style={styles.badge}>1</Text>
           <Text style={{ color: 'white', paddingLeft: 20, padding: 5, paddingRight: 20, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
             <FontAwesome>{Icons.shoppingBag}</FontAwesome>
           </Text>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
       {/* <TouchableHighlight>
                   <View>1</View>
                   

@@ -1,7 +1,8 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
-import { ListView, View, Text, ActivityIndicator,Dimensions, ImageBackground, StyleSheet, Image, ToastAndroid, AsyncStorage, TouchableHighlight, StatusBar, ScrollView } from 'react-native';
+import { ListView, View, Text, ActivityIndicator,Dimensions, ImageBackground, StyleSheet, Image, ToastAndroid,
+   AsyncStorage, TouchableHighlight, StatusBar, ScrollView, TouchableOpacity } from 'react-native';
 
 var SplashScreen = require('@remobile/react-native-splashscreen');
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -103,33 +104,33 @@ export default class ListViewExample extends PureComponent<{}, State> {
     headerStyle: {
       backgroundColor: '#51c0c3'
     },
-    headerLeft: <TouchableHighlight onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
+    headerLeft: <TouchableOpacity onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
       color: 'white', paddingLeft: 20,
       padding: 5,
       fontFamily: 'WhitneyMedium',
       fontSize: 18
-    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableHighlight>,
+    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableOpacity>,
     // headerLeft: <TouchableHighlight onPress={() => navigation.navigate("DrawerOpen")}><Text style={{color:'white',paddingLeft:20,
     // padding:5,fontSize:18}}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableHighlight>,
     headerRight: <View style={{ flex: 1, flexDirection: 'row' }}>
-      <TouchableHighlight onPress={() => navigation.navigate('Search')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Search')}>
         <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
           <FontAwesome>{Icons.search}</FontAwesome>
         </Text>
-      </TouchableHighlight>
-      <TouchableHighlight onPress={() => navigation.navigate('Wishlist')}>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Wishlist')}>
         <Text style={{ color: 'white', paddingLeft: 20, padding: 5, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
           <FontAwesome>{Icons.heart}</FontAwesome>
         </Text>
-      </TouchableHighlight>
-      <TouchableHighlight onPress={() => navigation.navigate('Cart')}>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
         <View>
           {typeof (navigation.state.params) === 'undefined' || typeof (navigation.state.params.cartCount) === 'undefined' ? <Text style={{ position: 'absolute' }}></Text> : navigation.state.params.cartCount}
           <Text style={{ color: 'white', paddingLeft: 20, padding: 5, paddingRight: 20, fontFamily: 'WhitneyMedium', fontSize: 18 }}>
             <FontAwesome>{Icons.shoppingBag}</FontAwesome>
           </Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
       {/* <TouchableHighlight>
                   <View>1</View>
                   

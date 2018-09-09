@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
-import { ListView, View, Text,TextInput, Alert, StyleSheet, Image, ToastAndroid, AsyncStorage,TouchableWithoutFeedback, TouchableHighlight, StatusBar, ScrollView } from 'react-native';
+import { ListView, View, Text,TextInput, Alert, StyleSheet, Image, ToastAndroid, AsyncStorage,TouchableOpacity, TouchableHighlight, StatusBar, ScrollView } from 'react-native';
 
 var SplashScreen = require('@remobile/react-native-splashscreen');
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -32,12 +32,12 @@ export default class ListViewExample extends PureComponent<{}, State> {
   static navigationOptions = ({ navigation }) => ({
     title: typeof (navigation.state.params) === 'undefined' || typeof (navigation.state.params.title) === 'undefined' ? 'Login' : navigation.state.params.title,
     tabBarIcon: ({ tintColor }) => <Text style={{ fontSize: 20 }}><FontAwesome color={tintColor}>{Icons.user}</FontAwesome></Text>,
-    headerLeft: <TouchableWithoutFeedback onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
+    headerLeft: <TouchableOpacity onPress={() => navigation.navigate('DrawerOpen')}><Text style={{
       color: 'white', paddingLeft: 20,
       padding: 5,
       fontFamily: 'WhitneyMedium',
       fontSize: 18
-    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableWithoutFeedback>,
+    }}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableOpacity>,
     tabBarLabel: 'Profile',
     headerTintColor: 'white',
     headerStyle: {

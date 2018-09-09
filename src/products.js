@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
-import { ListView, View, Text,YellowBox, StyleSheet, Image,ToastAndroid, AsyncStorage,TouchableOpacity,TouchableWithoutFeedback, TouchableHighlight, StatusBar, ScrollView } from 'react-native';
+import { ListView, View, Text,YellowBox, StyleSheet, Image,ToastAndroid, AsyncStorage,TouchableOpacity, TouchableHighlight, StatusBar, ScrollView } from 'react-native';
 
 var SplashScreen = require('@remobile/react-native-splashscreen');
 import ImageSlider from 'react-native-image-slider';
@@ -47,24 +47,24 @@ static navigationOptions =({navigation})=>({
 //   fontFamily:'WhitneyMedium',
 //   fontSize:18}}><FontAwesome>{Icons.bars}</FontAwesome></Text></TouchableHighlight>,
   headerRight: <View style={{flex:1,flexDirection:'row'}}>
-                <TouchableWithoutFeedback onPress={()=>navigation.navigate('Search')}>
+                <TouchableOpacity onPress={()=>navigation.navigate('Search')}>
                   <Text style={{color:'white',paddingLeft:20,padding:5,fontFamily:'WhitneyMedium',fontSize:18}}>
                     <FontAwesome>{Icons.search}</FontAwesome>
                   </Text>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                </TouchableOpacity>
+                <TouchableOpacity>
                   <Text style={{color:'white',paddingLeft:20,padding:5,fontFamily:'WhitneyMedium',fontSize:18}}>
                     <FontAwesome>{Icons.heart}</FontAwesome>
                   </Text>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={()=>navigation.navigate('Cart')}>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>navigation.navigate('Cart')}>
                 <View>
                 {typeof (navigation.state.params) === 'undefined' || typeof (navigation.state.params.cartCount) === 'undefined' ? <Text style={{position:'absolute'}}></Text> : navigation.state.params.cartCount}
                   <Text style={{color:'white',paddingLeft:20,padding:5,paddingRight:20, fontFamily:'WhitneyMedium', fontSize:18}}>
                     <FontAwesome>{Icons.shoppingBag}</FontAwesome>
                   </Text>
                 </View>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
                 {/* <TouchableHighlight>
                   <View>1</View>
                   

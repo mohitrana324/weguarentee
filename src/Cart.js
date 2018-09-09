@@ -15,12 +15,15 @@ import env from './components/env';
 import { ListItem, SearchBar, Header, CheckBox, Button, FormLabel, FormInput, FormValidationMessage, Divider } from 'react-native-elements';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import { HeaderBackButton } from 'react-navigation';
+import { ProgressDialog } from 'react-native-simple-dialogs';
 
 var { height, width } = Dimensions.get('window');
 class Page1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      progressVisible:false,
+      allowCouponApply:true,
       products: <ActivityIndicator size="large" color="#51c0c3" />
     };
   }
@@ -33,6 +36,7 @@ class Page1 extends Component {
   });
 
   increase(data) {
+    this.setState({progressVisible:true});
     AsyncStorage.getItem('token').then((token) => {
       fetch(env.BASE_URL + "rest/cart/cart", {
         method: 'PUT',
@@ -47,11 +51,15 @@ class Page1 extends Component {
           console.log(responseData);
           if (responseData.success == 1) {
             this.getProducts();
+            this.setState({progressVisible:false});
+          } else{
+            this.setState({progressVisible:false});
           }
         });
     })
   }
   decrease(data) {
+    this.setState({progressVisible:true});
     if (parseInt(data.quantity) > 1) {
       AsyncStorage.getItem('token').then((token) => {
         fetch(env.BASE_URL + "rest/cart/cart", {
@@ -67,10 +75,14 @@ class Page1 extends Component {
             console.log(responseData);
             if (responseData.success == 1) {
               this.getProducts();
+              this.setState({progressVisible:false});
+            }else{
+              this.setState({progressVisible:false});
             }
           });
       })
     } else {
+      this.setState({progressVisible:false});
       Alert.alert(
         'Confirmation',
         'Are you sure you want to delete 1 item',
@@ -83,6 +95,7 @@ class Page1 extends Component {
     }
   }
   confirmRemove(key) {
+    this.setState({progressVisible:true});
     AsyncStorage.getItem('token').then((token) => {
       fetch(env.BASE_URL + "rest/cart/cart&key=" + key, {
         method: 'DELETE',
@@ -91,6 +104,7 @@ class Page1 extends Component {
         }
       }).then((response) => response.json())
         .then((responseData) => {
+          this.setState({progressVisible:false});
           ToastAndroid.show('Delete Successfully', ToastAndroid.SHORT);
           this.getProducts();
         });
@@ -163,10 +177,11 @@ class Page1 extends Component {
                   </View>;
                 })
                 this.setState({
-                  total: <View><View style={styles.coupen}>
+                  total: <View><View style={styles.coupen} accessible={false}>
                     <Text style={{ fontSize: 16, fontWeight: 'bold' }}>APPLY COUPON CODE</Text>
                     <Text>Enter your coupon code if you have one</Text>
                     <TextInput
+                      editable={this.state.allowCouponApply}
                       style={{ height: 50, width: '100%' }}
                       onChangeText={(coupon) => this.setState({ coupon })}
                       placeholder="Enter Coupon Code"
@@ -192,9 +207,11 @@ class Page1 extends Component {
   }
 
   coupenApply() {
+    this.setState({progressVisible:true});
     AsyncStorage.getItem('user').then((user) => {
       console.log(JSON.parse(user).name);
       if (JSON.parse(user).name == 'guest') {
+        this.setState({progressVisible:false});
         Alert.alert(
           'Login',
           'You must login or create account to save item to your wish list',
@@ -218,9 +235,12 @@ class Page1 extends Component {
             .then((responseData) => {
               if (responseData.success == 1) {
                 this.getProducts();
+                this.setState({progressVisible:false});
                 console.log(responseData);
               } else {
+                this.setState({progressVisible:false,allowCouponApply:false});
                 ToastAndroid.show(responseData.error[0], ToastAndroid.SHORT);
+               // alert(this.state.allowCouponApply)
               }
             })
         });
@@ -238,6 +258,10 @@ class Page1 extends Component {
           <StatusBar
             backgroundColor="#51c0c3"
             barStyle="light-content"
+          />
+        <ProgressDialog
+            visible={this.state.progressVisible}
+            message="Please, wait..."
           />
 
           {this.state.products}
