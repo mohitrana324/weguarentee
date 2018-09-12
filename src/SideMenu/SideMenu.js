@@ -86,7 +86,14 @@ class SideMenu extends Component {
     })
   }
   render() {
-    
+    AsyncStorage.getItem('user').then((data) => {
+      if (JSON.parse(data).name == 'guest') {
+        this.setState({name:'Welcome Guest!'});
+      }
+      else {
+        this.setState({name:'Welcome '+JSON.parse(data).name});
+      }
+    });
     return (
       <View style={styles.container}>
         <ScrollView>

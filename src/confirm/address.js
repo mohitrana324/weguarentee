@@ -24,7 +24,7 @@ class Page1 extends Component {
   }
 
   static navigationOptions = {
-    title: 'Shipping Address',
+    title: 'Add Address',
     headerTintColor: 'white',
     headerStyle: {
       backgroundColor: '#51c0c3'

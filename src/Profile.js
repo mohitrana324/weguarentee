@@ -62,6 +62,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
     )
   }
   _Logout() {
+    this.setState({progressVisible:true});
     AsyncStorage.getItem('token').then((token) => {
       fetch(env.BASE_URL + "rest/logout/logout", {
         method: 'POST',
@@ -70,12 +71,13 @@ export default class ListViewExample extends PureComponent<{}, State> {
         }
       }).then((response) => response.json())
         .then((responseData) => {
+          this.setState({progressVisible:false});
           console.log(responseData);
           if(responseData.success == 1)
           {
             ToastAndroid.show('Successfully Logout', ToastAndroid.SHORT);
             AsyncStorage.setItem('user', JSON.stringify({ name: 'guest' }));
-            
+            this.userAccess();
             this.props.navigation.navigate('ScreenOne');
           }
         })

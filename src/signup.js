@@ -9,13 +9,16 @@ import { ListItem, SearchBar, Header,CheckBox, Button, FormLabel, FormInput, For
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import env from './components/env';
 import { ProgressDialog } from 'react-native-simple-dialogs';
+import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button'
+
 export default class ListViewExample extends PureComponent<{}, State> {
   constructor(props){
     super(props);
     this.state = {
       loading:false,
       country:null,
-      progressVisible:false
+      progressVisible:false,
+      subscribe:'no'
     }
   }
 
@@ -90,7 +93,7 @@ export default class ListViewExample extends PureComponent<{}, State> {
             <FormLabel>Mobile</FormLabel>
             <FormInput keyboardType={'numeric'} onChangeText={(telephone) => this.setState({telephone})} placeholder="Enter mobile number"/>
             
-            <Text style={styles.heading}>Your Address</Text>
+            {/* <Text style={styles.heading}>Your Address</Text>
             <FormLabel>Company</FormLabel>
             <FormInput onChangeText={(company) => this.setState({company})} placeholder="Enter your company name"/>
             <FormLabel>Address</FormLabel>
@@ -98,14 +101,27 @@ export default class ListViewExample extends PureComponent<{}, State> {
             <FormLabel>City</FormLabel>
             <FormInput onChangeText={(city) => this.setState({city})} placeholder="Enter City"/>
             <FormLabel>Zip</FormLabel>
-            <FormInput keyboardType={'numeric'} onChangeText={(postcode) => this.setState({postcode})} placeholder="Enter zip code"/>
+            <FormInput keyboardType={'numeric'} onChangeText={(postcode) => this.setState({postcode})} placeholder="Enter zip code"/> */}
             {/* <View style={{paddingLeft:20}}>{this.state.country}</View> */}
             <Text style={styles.heading}>Your Password</Text>
             <FormLabel>Password</FormLabel>
             <FormInput secureTextEntry={true} onChangeText={(password) => this.setState({password})} placeholder="Enter your password"/>
             <FormLabel>Confirm Password</FormLabel>
             <FormInput secureTextEntry={true} onChangeText={(confirm) => this.setState({confirm})} placeholder="Enter password again"/>
-            
+            <Text style={styles.heading}>Newsletter</Text>
+            <View style={{flexDirection:'row',marginBottom:10,marginTop:10}}>
+                <FormLabel>Subscribe</FormLabel>
+                <RadioGroup color='#51c0c3' highlightColor='#fff' style={{flexDirection:'row'}}
+                  onSelect={(index, value) => this.onSelect(index, value)} selectedIndex={1}>
+                  <RadioButton value='yes' >
+                    <Text>Yes</Text>
+                  </RadioButton>
+                  <RadioButton value='no'>
+                    <Text>No</Text>
+                  </RadioButton>
+                </RadioGroup>
+            </View>
+           
             <CheckBox
               title='I have read and agree to the Privacy Policy'
               onPress={(event) => this._toggle(event)}
@@ -116,6 +132,10 @@ export default class ListViewExample extends PureComponent<{}, State> {
         </ScrollView>
       </View>
     );
+  }
+  onSelect(i,val){
+    this.setState({subscribe:val});
+
   }
   submit(){
     console.log(this.state);

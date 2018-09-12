@@ -187,7 +187,7 @@ class Page1 extends Component {
                       placeholder="Enter Coupon Code"
                       value={this.state.coupon}
                     />
-                    <Button onPress={() => this.coupenApply()} raised title='Apply' backgroundColor="#51c0c3" />
+                    <Button onPress={() => this.coupenApply()} raised title='Apply' backgroundColor="#51c0c3" disabled={!this.state.allowCouponApply} />
                   </View><View style={styles.box}>{total}</View></View>
                 });
               }
@@ -240,6 +240,7 @@ class Page1 extends Component {
               } else {
                 this.setState({progressVisible:false,allowCouponApply:false});
                 ToastAndroid.show(responseData.error[0], ToastAndroid.SHORT);
+                this.getProducts();
                // alert(this.state.allowCouponApply)
               }
             })

@@ -34,16 +34,16 @@ class Page3 extends Component {
       }).then((response) => response.json())
         .then((responseData) => {
           if (responseData.success == 1) {
-            console.log(responseData.data.payment_methods.g2apay            );
+            //console.log(responseData.data.payment_methods.g2apay            );
             this.setState({payment:<RadioGroup color='#51c0c3' highlightColor='#f5f5f5'
               onSelect={(index, value) => this.onSelect(index, value)}
             >
-              <RadioButton value={responseData.data.payment_methods.cod_order_fee} >
-                <Text>{responseData.data.payment_methods.cod_order_fee.title}</Text>
+              <RadioButton value={responseData.data.items.cod_order_fee} >
+                <Text>{responseData.data.items.cod_order_fee.title}</Text>
               </RadioButton>
 
-              <RadioButton value={responseData.data.payment_methods.g2apay}>
-                <Text>{responseData.data.payment_methods.g2apay.title}</Text>
+              <RadioButton value={responseData.data.items.g2apay}>
+                <Text>{responseData.data.items.g2apay.title}</Text>
               </RadioButton>
 
             </RadioGroup>});
@@ -68,6 +68,8 @@ class Page3 extends Component {
     this.setState({ progressVisible: true });
 
     AsyncStorage.getItem('token').then((token) => {
+      console.log('url-> ',env.BASE_URL + "rest/payment_method/payments");
+      console.log('data ',{ payment_method: value.code, agree:1,comment:'' });
       fetch(env.BASE_URL + "rest/payment_method/payments", {
         method: 'POST',
         headers: {
@@ -78,6 +80,7 @@ class Page3 extends Component {
         body: JSON.stringify({ payment_method: value.code, agree:1,comment:'' })
       }).then((response) => response.json())
         .then((responseData) => {
+          console.log('payment',responseData);
           this.setState({ progressVisible: false });
           if (responseData.success == 1) {
             

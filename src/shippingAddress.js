@@ -22,12 +22,12 @@ class Page3 extends Component {
     headerStyle: {
       backgroundColor: '#51c0c3'
     },
-    headerRight:<TouchableOpacity onPress={()=>navigation.navigate('Shipping')}><Text style={{color:'white', fontSize:18, padding:10}}><FontAwesome>{Icons.check}</FontAwesome></Text></TouchableOpacity>
+    headerRight:<TouchableOpacity onPress={()=>navigation.navigate('Payment')}><Text style={{color:'white', fontSize:18, padding:10}}><FontAwesome>{Icons.check}</FontAwesome></Text></TouchableOpacity>
   })
   
   getAddress() {
     AsyncStorage.getItem('token').then((token) => {
-      fetch(env.BASE_URL + "rest/payment_address/paymentaddress", {
+      fetch(env.BASE_URL + "rest/shipping_address/shippingaddress", {
         method: 'get',
         headers: {
           Authorization: 'Bearer ' + JSON.parse(token).access_token
@@ -73,7 +73,7 @@ class Page3 extends Component {
     this.setState({progressVisible:true});
     
     AsyncStorage.getItem('token').then((token) => {
-      fetch(env.BASE_URL+"rest/payment_address/paymentaddress&existing=1", {
+      fetch(env.BASE_URL+"rest/shipping_address/shippingaddress&existing=1", {
         method:'POST',
         headers:{
           Authorization: 'Bearer ' + JSON.parse(token).access_token,
@@ -85,7 +85,7 @@ class Page3 extends Component {
       .then((responseData) => {
         console.log(responseData);
         this.setState({progressVisible:false});
-          this.props.navigation.navigate('Shipping');
+          this.props.navigation.navigate('Payment');
         // }else{
         //   ToastAndroid.show(responseData.error[0], ToastAndroid.SHORT);
         // }
@@ -107,7 +107,7 @@ class Page3 extends Component {
           />
           <View style={styles.card}>
             <View style={{ flexDirection: 'row', borderBottomColor: '#ccc', borderBottomWidth: 1, justifyContent: 'space-between' }}>
-              <Text style={{ fontSize: 18, padding: 5, fontWeight: 'bold' }}>Billing Address</Text>
+              <Text style={{ fontSize: 18, padding: 5, fontWeight: 'bold' }}>Shipping Address</Text>
               <TouchableHighlight onPress={() => this.props.navigation.navigate('AddAddress')} style={{ padding: 10 }}><Text><FontAwesome>{Icons.plus}</FontAwesome></Text></TouchableHighlight>
             </View>
             {/* <Text style={{ padding: 5, fontSize: 14 }}>Default Address</Text> */}

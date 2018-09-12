@@ -1,20 +1,21 @@
 /* @flow */
 
 import React, { PureComponent } from 'react';
-import { ListView, View, Text, StyleSheet, Image, ToastAndroid, AsyncStorage, TouchableHighlight, StatusBar, ScrollView } from 'react-native';
+import { ListView, View, Text, StyleSheet, Image,TextInput, ToastAndroid, AsyncStorage, TouchableOpacity,TouchableHighlight, StatusBar, ScrollView } from 'react-native';
 
 var SplashScreen = require('@remobile/react-native-splashscreen');
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListItem, SearchBar, Header,CheckBox, Button, FormLabel, FormInput, FormValidationMessage, Divider } from 'react-native-elements';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import env from './components/env';
-import { ProgressDialog } from 'react-native-simple-dialogs';
+import { ProgressDialog,Dialog } from 'react-native-simple-dialogs';
 export default class ListViewExample extends PureComponent<{}, State> {
   constructor(props){
     super(props);
     this.state = {
       loading:false,
-      progressVisible:false
+      progressVisible:false,
+      ForgotPassword:false
     }
   }
 
@@ -56,6 +57,39 @@ export default class ListViewExample extends PureComponent<{}, State> {
            
             <Button onPress={()=>this.submit()} raised title='Login' style={{ width: '100%' }} backgroundColor="#51c0c3" />
         </View>
+        <Dialog
+          visible={this.state.ForgotPassword}
+          title="FORGOT YOUR PASSWORD?"
+          onTouchOutside={() => this.setState({ ForgotPassword: false })} >
+          <View style={{height:180}}>
+            <View style={styles.row_txt}>
+              <Text>Enter the e-mail address associated with your account. Click submit to have a password reset link e-mailed to you.</Text>
+              <Text style={{fontWeight:'bold',fontSize:15,marginBottom:5,marginTop:5}}>Your E-Mail Address</Text>
+              <TextInput
+                style={{ height: 40, borderColor: '#ccc', borderWidth: 1, width: '100%',borderRadius:5,paddingLeft:15 }}
+                onChangeText={(email) => this.setState({ email })}
+                underlineColorAndroid='white'
+                placeholder="Enter Email Id"                
+                value={this.state.email}
+              />
+            </View>
+
+            <View style={[styles.row, {flexDirection:'row',paddingTop:10, justifyContent: 'flex-end',marginTop:5 }]}>
+              <TouchableOpacity onPress={() => this.setState({ ForgotPassword: false })} style={{ padding: 10,backgroundColor:'#51c0c3',width:'49%',marginRight:5 }}>
+                <Text style={{ textAlign: 'center',color: '#fff',fontWeight:'bold',fontSize:16 }}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.forgotPassword()} style={{ padding: 10,backgroundColor:'#51c0c3',width:'49%'}}>
+                <Text style={{ textAlign: 'center', color: '#fff',fontWeight:'bold',fontSize:16 }}>Send</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Dialog>
+        <View style={{marginTop:30,alignItems:'center'}}>
+          <TouchableOpacity onPress={()=>this.setState({ ForgotPassword: true })}>
+            <Text style={{fontWeight:'bold',padding:5}}>Forgot Password <Text style={{color:'#51c0c3'}}>Click here</Text></Text>
+            
+          </TouchableOpacity>
+        </View>
         </ScrollView>
       </View>
     );
@@ -90,6 +124,34 @@ export default class ListViewExample extends PureComponent<{}, State> {
       })
     
   }
+  forgotPassword(){
+    if(this.state.email==''){
+      ToastAndroid.show('Please entern email id', ToastAndroid.SHORT);
+    }
+  //   this.setState({progressVisible:true});
+  //     AsyncStorage.getItem('token').then((token) => {
+  //       fetch(env.BASE_URL+"rest/acount/forgotton", {
+  //         method:'POST',
+  //         headers:{
+  //           Authorization: 'Bearer ' + JSON.parse(token).access_token,
+  //           Accept  : 'application/json',
+  //           'Content-Type' : 'application/json'
+  //         },
+  //         body:JSON.stringify(this.state)
+  //       }).then((response) => response.json())
+  //       .then((responseData) => {
+  //         this.setState({progressVisible:false});
+  //         console.log(responseData);
+  //         if(responseData.success == 1)
+  //         {
+  //           this.setState({ ForgotPassword: false })
+  //         }else{
+  //           ToastAndroid.show(responseData.error[0], ToastAndroid.SHORT);
+  //         }
+          
+  //       })
+  //     })
+  // }
 }
 
 const styles = StyleSheet.create({

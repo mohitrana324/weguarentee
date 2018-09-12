@@ -23,6 +23,7 @@ import env from './components/env';
 import Signup from './signup';
 import Login from './login';
 import Confirm from './confirmShopping';
+import Shipping from './shippingAddress';
 import AddAddress from './confirm/address';
 import Payment from './confirm/payment';
 import confirmWeb from './confirm/Webview';
@@ -68,6 +69,7 @@ const tabs = TabNavigator({
     },
     Cart: { screen: Cart },
     Confirm: { screen: Confirm },
+    Shipping: { screen: Shipping },
     SubCategory: { screen: SubCategory },
     Products: { screen: Products },
     ProductByCategory: { screen: ProductByCategory },
