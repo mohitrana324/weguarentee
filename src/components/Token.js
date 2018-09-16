@@ -27,6 +27,7 @@ const GET = {
                     }
                   }).then((response) => response.json())
                     .then((responseData) => {
+                      console.log('token',responseData);
                       if (responseData.success == 1) {
                         AsyncStorage.setItem('token', JSON.stringify(responseData.data));
                         AsyncStorage.setItem('user', JSON.stringify({ name: 'guest' }));

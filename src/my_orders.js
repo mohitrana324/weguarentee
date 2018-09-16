@@ -9,7 +9,7 @@ import {
   Text,
   StyleSheet, AsyncStorage,Image,Alert,Dimensions,
   ScrollView, ActivityIndicator,ImageBackground,ToastAndroid,
-  View, StatusBar, TouchableHighlight
+  View, StatusBar, TouchableHighlight,FlatList
 } from 'react-native';
 import env from './components/env';
 import FontAwesome, { Icons } from 'react-native-fontawesome';
@@ -20,7 +20,7 @@ class Page1 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      products: <ActivityIndicator size="large" color="#51c0c3" />
+      data:''
     };
   }
   static navigationOptions = ({ navigation }) => ({
@@ -33,71 +33,46 @@ class Page1 extends Component {
 
   
 
-  getProducts(){
+  getMyorders(id){
     AsyncStorage.getItem('token').then((token) => {
-      fetch(env.BASE_URL + "rest/cart/cart", {
+      fetch(env.BASE_URL + "account/forder&page=1&id="+id, {
         method: 'get',
         headers: {
           Authorization: 'Bearer ' + JSON.parse(token).access_token
         }
       }).then((response) => response.json())
         .then((responseData) => {
-          if (responseData.success == 1) {
-            if (responseData.data.products != undefined) {
-              var data = responseData.data.products.map((data) => {
-                if(data.quantity == "1")
-                {
-                  var trash = <Text style={{ color: 'white', fontSize: 14 }}><FontAwesome>{Icons.trash}</FontAwesome></Text>;
-                }else{
-                  var trash = <Text style={{ color: 'white', fontSize: 14 }}>-</Text>;
-                }
-                return <View style={styles.card} key={data.key}>
-                  <View style={styles.content}>
-                    <ImageBackground source={{uri:data.thumb}} style={styles.image}>
-                      </ImageBackground>
-                    <View style={styles.productContent}>
-                      <Text style={styles.title}>{data.name}</Text>
-                      <View style={styles.QTY}>
-                        <TouchableHighlight onPress={()=>this.decrease(data)} style={styles.min}>{trash}</TouchableHighlight>
-                        <Text style={styles.qtyNo}>{data.quantity}</Text>
-                        <TouchableHighlight onPress={()=>this.increase(data)} style={styles.min}><Text style={{ color: 'white', fontSize: 14 }}>+</Text></TouchableHighlight>
-                      </View>
-                    </View>
-                  </View>
-                  <View style={styles.footer}>
-                    <View style={styles.unit}><Text>Unit Price</Text><Text style={{}}>{data.price}</Text></View>
-                    <View style={styles.unit}><Text>Sub Total</Text><Text style={{}}>{data.total}</Text></View>
-                  </View>
-                </View>;
-              });
-              this.setState({ continueBtn: <View style={{ width: '100%', backgroundColor: '#51c0c3', height: 50, left: 0, right: 0, padding: 0, paddingTop: 3, position: 'absolute', bottom: 0 }}><Button title={'Continue (Rs. '+ responseData.data.total_raw+')'} buttonStyle={{ backgroundColor: '#51c0c3', justifyContent: 'center', width: '100%', alignItems: 'center' }} /></View> });
-              this.setState({ products: data });
-              
-              if(responseData.data.totals)
-              {
-                var total = responseData.data.totals.map(function(data, key){
-                  return <View style={styles.row} key={key}>
-                    <View style={styles.col}><Text style={{fontWeight:'bold'}}>{data.title}</Text></View>
-                    <View style={styles.col}><Text style={{fontWeight:'bold'}}>{data.text}</Text></View>
-                  </View>;
-                })
-                this.setState({total:<View style={styles.box}>{total}</View>});
-              }
-            } else {
-              this.setState({total:<Text></Text>});
-              this.setState({ continueBtn: <View></View> });
-              this.setState({ products: <View style={styles.cartEmpty}>
-                <FontAwesome style={{fontSize:100, color:'#ccc'}}>{Icons.shoppingBag}</FontAwesome>
-                <Text>No Item Found</Text>
-              </View> });
-            }
-          }
+          console.log('response',responseData);
+          this.setState({data:responseData.orders});
         })
     })
   }
   componentWillMount() {
-      this.getProducts();
+    AsyncStorage.getItem('user_detail').then((data) => {
+
+      id=JSON.parse(data).customer_id;
+      console.log(id)
+      this.getMyorders(id);
+    }).catch((error)=>console.log(error))      
   }
+
+  _renderItem = ({item}) => {
+    console.log('item',item)
+   return( <View  style={{flexDirection:'row',marginBottom:2,backgroundColor:'#fff',padding:10,
+   borderRadius:4,marginLeft:10,marginRight:10}}>
+      <View style={{flexDirection:'column',flex:1}}>
+        <Text style={{fontSize:10}}>{item.date_added}</Text>
+        <Text># {item.order_id}</Text>
+      </View>
+      <View style={{flexDirection:'column',flex:2,alignItems:'center'}}>
+      <Text><Text style={{fontSize:10}}>Status</Text>{item.status}</Text>
+        <Text><Text style={{fontSize:10}}>Total</Text>{item.total}</Text>
+      </View>
+      <View style={{flexDirection:'column',flex:1}}>      
+        
+      </View>
+    </View>
+  )};
 
   render() {
     return (
@@ -107,11 +82,16 @@ class Page1 extends Component {
             backgroundColor="#51c0c3"
             barStyle="light-content"
           />
+          <View style={{marginTop:10}}>
+          <FlatList
+            data={this.state.data}
+            keyExtractor={(item,index)=>index.toString()}
+            renderItem={this._renderItem}
+          />
+          </View>
           
-          {this.state.products}
-          {this.state.total}
+          
         </ScrollView>
-        {this.state.continueBtn}
       </View>
 
 
@@ -160,7 +140,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     backgroundColor: '#fffaf9',
-    height: 70,
+    // height: 70,
     width: '100%',
     flexDirection: 'column'
   },

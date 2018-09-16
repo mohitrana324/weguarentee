@@ -30,6 +30,13 @@ import confirmWeb from './confirm/Webview';
 import ConfirmPayment from './confirm/confirm';
 import myOrder from './my_orders';
 import AccountInfo from './account_info';
+import Aboutus from './aboutus';
+import Contactus from './contactus';
+import privacypolicy from './privacypolicy';
+import returnrule from './Return';
+import shopingDelivery from "./shopingDelivery";
+import whyOrganic from "./whyOrganic";
+import termCondition from "./termsConditions";
 import { DrawerNavigator, TabNavigator, StackNavigator } from 'react-navigation';
 
 const tabs = TabNavigator({
@@ -82,10 +89,18 @@ const tabs = TabNavigator({
     ConfirmPayment:{screen:ConfirmPayment},
     confirmWeb:{screen:confirmWeb},
     myOrder:{screen:myOrder},
-    AccountInfo:{screen:AccountInfo},
+    AccountInfo:{screen:AccountInfo},    
     SingleProduct: {
       screen: SingleProduct
-    }
+    },
+    Aboutus:{screen:Aboutus},
+    Contactus:{screen:Contactus},
+    PrivacyPolicy:{screen:privacypolicy},
+    Return:{screen:returnrule},
+    ShopingDelivery:{screen:shopingDelivery},
+    WhyOrganic:{screen:whyOrganic},
+    TermCondition:{screen:termCondition},
+    
   });
 
 const DrawerScreen = DrawerNavigator({

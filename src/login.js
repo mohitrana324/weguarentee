@@ -9,6 +9,10 @@ import { ListItem, SearchBar, Header,CheckBox, Button, FormLabel, FormInput, For
 import FontAwesome, { Icons } from 'react-native-fontawesome';
 import env from './components/env';
 import { ProgressDialog,Dialog } from 'react-native-simple-dialogs';
+
+import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
+
+
 export default class ListViewExample extends PureComponent<{}, State> {
   constructor(props){
     super(props);
@@ -31,6 +35,26 @@ export default class ListViewExample extends PureComponent<{}, State> {
 
   _toggle(event) {
     this.setState({checked: !this.state.checked});
+  }
+
+  googleAuth() {
+    console.log(GoogleSignin);    
+    GoogleSignin.configure({webClientId:'843815696877-8in37ptn29n4cps8nffeht8kah3ebor7.apps.googleusercontent.com'}).then(()=>{
+   
+    GoogleSignin.signIn()
+      .then((user) => {
+        alert(JSON.stringify(user));
+        console.log('google',user);
+        let params = {email: user.email, image: user.photo, name: user.givenName,role:'user',status:'activated',provider:'google'}
+        console.log("this.props", this.props);
+
+      })
+      .catch((err) => {
+        console.log('WRONG SIGNIN', err);
+        alert("canceled by user");
+      })
+      .done();
+    }).catch(googleError=>console.log(googleError));
   }
 
   render() {
@@ -90,6 +114,12 @@ export default class ListViewExample extends PureComponent<{}, State> {
             
           </TouchableOpacity>
         </View>
+        <GoogleSigninButton
+          style={{ width: 48, height: 48 }}
+          size={GoogleSigninButton.Size.Icon}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={(e)=>{this.googleAuth();}}
+        />
         </ScrollView>
       </View>
     );
@@ -120,38 +150,46 @@ export default class ListViewExample extends PureComponent<{}, State> {
             ToastAndroid.show(responseData.error[0], ToastAndroid.SHORT);
           }
           
-        })
-      })
+        }).catch(e=>console.log(e))
+      }).catch(e=>console.log(e));
     
   }
   forgotPassword(){
-    if(this.state.email==''){
+    console.log('forgetpaSSWORD',this.state.email);
+
+    if(this.state.email=='' || this.state.email==null){
       ToastAndroid.show('Please entern email id', ToastAndroid.SHORT);
+      this.setState({ForgotPassword:false});
     }
-  //   this.setState({progressVisible:true});
-  //     AsyncStorage.getItem('token').then((token) => {
-  //       fetch(env.BASE_URL+"rest/acount/forgotton", {
-  //         method:'POST',
-  //         headers:{
-  //           Authorization: 'Bearer ' + JSON.parse(token).access_token,
-  //           Accept  : 'application/json',
-  //           'Content-Type' : 'application/json'
-  //         },
-  //         body:JSON.stringify(this.state)
-  //       }).then((response) => response.json())
-  //       .then((responseData) => {
-  //         this.setState({progressVisible:false});
-  //         console.log(responseData);
-  //         if(responseData.success == 1)
-  //         {
-  //           this.setState({ ForgotPassword: false })
-  //         }else{
-  //           ToastAndroid.show(responseData.error[0], ToastAndroid.SHORT);
-  //         }
+    //this.setState(ForgotPassword:false});
+      AsyncStorage.getItem('token').then((token) => {
+        console.log(token);
+        console.log(JSON.stringify(this.state));
+        console.log(env.BASE_URL+"account/fpassword");
+        fetch(env.BASE_URL+"rest/account/fpassword", {
+          method:'POST',
+          headers:{
+            Authorization: 'Bearer ' + JSON.parse(token).access_token,
+            Accept  : 'application/json',
+            'Content-Type' : 'application/json'
+          },
+          body:JSON.stringify({email:this.state.email})
+        }).then((response) => response.json())
+        .then((responseData) => {
+          console.log(response);
+          this.setState({progressVisible:false});
+          console.log(responseData);
+          if(responseData.result == 'success')
+          { 
+            this.setState({ ForgotPassword: false });
+            ToastAndroid.show(responseData.msg, ToastAndroid.SHORT);
+          }else{
+            ToastAndroid.show(responseData.error[0], ToastAndroid.SHORT);
+          }
           
-  //       })
-  //     })
-  // }
+        })
+      })
+  }
 }
 
 const styles = StyleSheet.create({

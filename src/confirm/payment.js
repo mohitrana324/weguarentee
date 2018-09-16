@@ -32,9 +32,9 @@ class Page3 extends Component {
           Authorization: 'Bearer ' + JSON.parse(token).access_token
         }
       }).then((response) => response.json())
-        .then((responseData) => {
+        .then((responseData) => {console.log(responseData);
           if (responseData.success == 1) {
-            //console.log(responseData.data.payment_methods.g2apay            );
+            
             this.setState({payment:<RadioGroup color='#51c0c3' highlightColor='#f5f5f5'
               onSelect={(index, value) => this.onSelect(index, value)}
             >

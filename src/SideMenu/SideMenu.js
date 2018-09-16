@@ -109,6 +109,27 @@ class SideMenu extends Component {
                 Home
               </Text>
               {this.state.category}
+              <Text key={1000} style={styles.navItemStyle} onPress={() => this.props.navigation.navigate('Aboutus')}>
+                About Us
+              </Text>
+              <Text key={1001} style={styles.navItemStyle} onPress={() => this.props.navigation.navigate('Contactus')}>
+                Contact Us
+              </Text>
+              <Text key={1002} style={styles.navItemStyle} onPress={() => this.props.navigation.navigate('PrivacyPolicy')}>
+              Privacy Policy
+              </Text>
+              <Text key={1003} style={styles.navItemStyle} onPress={() => this.props.navigation.navigate('Return')}>
+              Returns, Refund Exchange
+              </Text>
+              <Text key={1004} style={styles.navItemStyle} onPress={() => this.props.navigation.navigate('ShopingDelivery')}>
+              Shipping and Delivery
+              </Text>
+              <Text key={1005} style={styles.navItemStyle} onPress={() => this.props.navigation.navigate('TermCondition')}>
+              Terms And Conditions
+              </Text>
+              <Text key={1006} style={styles.navItemStyle} onPress={() => this.props.navigation.navigate('WhyOrganic')}>
+              Why Organic
+              </Text>
             </View>
           </View>
         </ScrollView>

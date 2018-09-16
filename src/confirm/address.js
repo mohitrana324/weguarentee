@@ -19,7 +19,8 @@ class Page1 extends Component {
     super(props);
     this.state = {
       progressVisible: false,
-      country_id: 8
+      country_id: 8,
+      checked:false
     }
   }
 
@@ -133,8 +134,20 @@ class Page1 extends Component {
             <FormInput onChangeText={(company) => this.setState({company})} placeholder="Enter your company name"/> */}
             <FormLabel>Billing Address</FormLabel>
             <FormInput onChangeText={(address_1) => this.setState({ address_1 })} placeholder="Enter address" />
+            <FormLabel>Check if Billing and Shipping address are same</FormLabel>
+            <View style={{paddingLeft:10,paddingRight:10}}><CheckBox
+              containerStyle={{backgroundColor:'#fff',borderBottomWidth:1,borderBottomColor:'#000',borderLeftWidth:0,borderRightWidth:0,borderTopWidth:0}}
+              checked={this.state.checked}
+              onPress={()=>this.setState({checked:!this.state.checked},()=>{
+                if(this.state.checked){
+                  this.setState({address_2:this.state.address_1})
+                }else{
+                  this.setState({address_2:''})
+                }
+              })}
+            /></View>
             <FormLabel>Shipping Address</FormLabel>
-            <FormInput onChangeText={(address_2) => this.setState({ address_2 })} placeholder="Enter address" />
+            <FormInput value={this.state.address_2} onChangeText={(address_2) => this.setState({ address_2 })} placeholder="Enter address" />
             <FormLabel>City</FormLabel>
             <FormInput onChangeText={(city) => this.setState({ city })} placeholder="Enter City" />
             <FormLabel>Zip</FormLabel>

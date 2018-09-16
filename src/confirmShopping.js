@@ -22,7 +22,7 @@ class Page3 extends Component {
     headerStyle: {
       backgroundColor: '#51c0c3'
     },
-    headerRight:<TouchableOpacity onPress={()=>navigation.navigate('Shipping')}><Text style={{color:'white', fontSize:18, padding:10}}><FontAwesome>{Icons.check}</FontAwesome></Text></TouchableOpacity>
+    headerRight:<TouchableOpacity onPress={()=>navigation.navigate('Payment')}><Text style={{color:'white', fontSize:18, padding:10}}><FontAwesome>{Icons.check}</FontAwesome></Text></TouchableOpacity>
   })
   
   getAddress() {
